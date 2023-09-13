@@ -21,3 +21,15 @@ function launchModal() {
 }
 
 
+// Fermeture de la modale
+
+//récupération du bouton X servant à fermer la modale
+const closeBtn = document.querySelector(".close");
+//création de l'evenement : au clic appel la fonction "closeModal"
+closeBtn.addEventListener("click", closeModal);
+
+//fonction qui repasse la modale en display none : la modale disparait
+function closeModal() {
+  modalbg.style.display = "none";
+}
+
