@@ -161,10 +161,6 @@ main {
 
 
 /*************** Modal form ******************/
-.erreur{
-  color: #fe142f;
-}
-
 .bground {
   display: none;
   position: fixed;
@@ -196,17 +192,19 @@ main {
   margin: 15px auto;
 }
 
-.location{
-  margin-top: 20px;
-}
-
 label {
   font-family: var(--font-default);
   font-size: 14px;
   font-weight: normal;
   display: inline-block;
-  margin-bottom: 11px;
+  margin-bottom: 5px;
+  margin-top: 11px;
 }
+
+.firstLabel{
+  margin-top: 0;
+}
+
 input {
   padding: 8px;
   border: none;
@@ -273,7 +271,7 @@ input {
   background: #c4c4c4;
 }
 .checkbox1{
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .checkbox2-label .checkbox-icon::after {
@@ -289,6 +287,24 @@ input {
   top: 19%;
 }
 
+
+.erreur{
+  color: #fe142f;
+}
+
+.succes-msg{
+  text-align: center;
+  font-size: 2.1rem;
+  margin: 60px auto;
+}
+
+.succes-msg span{
+  color: #74a1ce;
+}
+
+.required{
+  color: #fe142f;
+}
 
 /************* croix de fermeture de la modale ***************/
 .close {
@@ -359,6 +375,10 @@ footer {
   }
   .topnav.responsive .main-navbar{
     margin-right: 40px;
+  }
+
+  .succes-msg{
+    font-size: 1.8rem;
   }
 }
 
