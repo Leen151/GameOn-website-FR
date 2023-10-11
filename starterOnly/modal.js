@@ -1,6 +1,6 @@
 //////// DOM Elements //////////////
 const modalbg = document.querySelector(".bground");
-const modalContent = document.querySelector("modal-body")
+const modalContent = document.querySelector(".modal-body")
 const modalBtn = document.querySelectorAll(".btn-signup");
 const iconeMenu = document.querySelector(".icon");
 const reductedMenu = document.getElementById("myTopnav");
@@ -60,7 +60,7 @@ function closeModal() {
 }
 
 // Déclaration des constantes pour le traitement du formulaire
-const regExEmail = new RegExp("^[\w\.\-]{2,64}@([\w-]+\.)+([a-zA-Z]{2,4})$"); // regEx pour une adresse mail
+const regExEmail = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$"); // regEx pour une adresse mail
 const regExName = new RegExp("^[A-Za-z-]{2,64}$"); //regEx pour avoir au moins 2 lettres et 64 max (accepte le -)
 const regExQuantity = new RegExp("^[0-9]{1,3}$"); //regEx pour avoir un nombre entre 1 et 3 chiffres)
 const regExDate = new RegExp("^\\d{4}-\\d{2}-\\d{2}$");
@@ -70,7 +70,8 @@ const messages = {
     first: "Le prénom doit comporter au moins 2 caractères",
     last: "Le nom doit comporter au moins 2 caractères",
     email: "L'adresse email n'est pas valide",
-    date: "Veuillez entrer une date de naissance",
+    date: "Veuillez entrer une date de naissance valide",
+    age: "Tu es trop jeune pour participer",
     quantity: "Veuillez entrer un nombre valide",
     location: "Veuillez sélectionner une ville",
     cgu: "Vous devez accepter les conditions d'utilisation"
@@ -82,121 +83,131 @@ const informations = {
     email: "",
     date: "",
     quantity: "",
-    location: ""
+    location: "",
+    cgu: ""
+}
+
+// fonction générique pour vérifier un champ à l'aide d'une regEx et gérer l'affichage des messages d'erreur
+function verifierChamp(champ, regEx, message, champErreur) {
+    if (champ.value.trim() === "") {
+        champErreur.innerHTML = messages.empty
+        return false;
+    } else if (!regEx.test(champ.value.trim())) {
+        champErreur.innerHTML = message;
+        return false;
+    } else {
+        champErreur.innerHTML = "";
+        return true;
+    }
+}
+
+// fonction générique de vérification de date
+function verifierDate(champ, regEx, messageRegEx, condition, messageAge, champErreur){
+    if (champ.value.trim() === "") {
+        champErreur.innerHTML = messages.empty
+        return false
+    } else if (!regEx.test(champ.value)) {
+        champErreur.innerHTML = messageRegEx;
+        return false
+    } else if (condition) {
+        champErreur.innerHTML = messageAge
+        return false
+    } else {
+        champErreur.innerHTML = "";
+        return true
+    }
 }
 
 
+
+// vérification du Prénom
+let checkFirstName = false;
+firstName.addEventListener("blur", function () {
+    checkFirstName = verifierChamp(firstName, regExName, messages.first, errorFirst);
+});
+
+// vérification du Nom
+let checkLastName = false;
+lastName.addEventListener("blur", function () {
+    checkLastName = verifierChamp(lastName, regExName, messages.last, errorLast);
+});
+
+// vérification de l'adresse mail
+let checkEmail = false;
+email.addEventListener("blur", function () {
+    checkEmail = verifierChamp(email, regExEmail, messages.email, errorEmail);
+});
+
+// vérification du nombre de tournois
+let checkQuantity = false;
+quantity.addEventListener("blur", function () {
+    checkQuantity = verifierChamp(quantity, regExQuantity, messages.quantity, errorQuantity);
+});
+
+// vérification de la date
+let checkDate = false;
+dateBirthday.addEventListener("blur", function () {
+    const oneYearTime = 365 * 24 * 60 * 60 * 1000;  // durée d'une année en milliseconde
+    const todayTime = new Date().getTime();  // nombre de millisecondes écoulées depuis le premier janvier 1970 à minuit UTC jusqu'au jour actuel
+    const birthdayNumber = new Date(dateBirthday.value).getTime();  // nombre de millisecondes écoulées jusqu'à la date renseignée
+    const age = (todayTime - birthdayNumber) / oneYearTime
+    const conditionAge = age<15
+
+    checkDate = verifierDate(dateBirthday, regExDate, messages.date, conditionAge, messages.age, errorDate)
+});
+
+// au submit
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     console.log("submit");
 
-    // vérification du Prénom
-    // if (firstName.value.trim() === "") {
-    //     errorFirst.innerHTML = messages.empty
-    // } else if (!regExName.test(firstName.value.trim())) {
-    //     errorFirst.innerHTML = messages.first;
-    // } else {
-    //     errorFirst.innerHTML = "";
-    //     informations.firstName = firstName.value.trim();
-    //     console.log(informations.firstName)
-    // }
-    verifierChamp(firstName,regExName,messages.first,errorFirst)
-
-    // vérification du Nom
-    // if (lastName.value.trim() === "") {
-    //     errorLast.innerHTML = messages.empty
-    // } else if (!regExName.test(lastName.value.trim())) {
-    //     errorLast.innerHTML = messages.last;
-    // } else {
-    //     errorLast.innerHTML = "";
-    //     informations.lastName = lastName.value.trim();
-    //     console.log(informations.lastName);
-    // }
-    verifierChamp(lastName,regExName,messages.last,errorLast)
-
-    // vérification de l'adresse mail
-    // if (email.value.trim() === "") {
-    //     errorEmail.innerHTML = messages.empty
-    // } else if (!regExEmail.test(email.value.trim())) {
-    //     errorEmail.innerHTML = messages.email;
-    // } else {
-    //     errorEmail.innerHTML = "";
-    //     informations.email = email.value.trim();
-    //     console.log(informations.email);
-    // }
-    verifierChamp(email,regExEmail,messages.email,errorEmail)
-
-    // vérification de la date
-    // durée d'une année en milliseconde
-    const oneYearTime = 365*24*60*60*1000;
-    // nombre de millisecondes écoulées depuis le premier janvier 1970 à minuit UTC jusqu'au jour actuel
-    const todayTime = new Date().getTime();
-    // nombre de millisecondes écoulées depuis la date renseignée
-    const birthdayTime = new Date(dateBirthday.value).getTime();
-    // age de l'utilisateur
-    let age = (todayTime - birthdayTime)/oneYearTime
-
-    if (dateBirthday.value.trim === null){
-        errorDate.innerHTML = messages.empty
-    } else if (!regExDate.test(dateBirthday.value)){
-        errorDate.innerHTML = messages.date
-    } else if (age < 15){
-        errorDate.innerHTML = "Tu es trop jeune pour participer"
-    } else {
-        errorDate.innerHTML = "";
-        informations.date = dateBirthday.value.trim();
-        console.log(informations.date);
-    }
-
-    // vérification du nombre de tournois
-    if (quantity.value.trim() === "") {
-        errorQuantity.innerHTML = messages.empty
-    } else if (!regExQuantity.test(quantity.value.trim())) {
-        errorQuantity.innerHTML = messages.quantity;
-    } else {
-        errorQuantity.innerHTML = "";
-        informations.quantity = quantity.value.trim();
-        console.log(informations.quantity);
-    }
-
     //vérification qu'une ville est sélectionnée
-    let locationSelected = false;
-    let location = "";
+    let CheckLocationSelected = false;
     for (let i = 0; i < locationChoice.length; i++) {
         if (locationChoice[i].checked) {
-            locationSelected = true;
-            location = locationChoice[i].value;
-            console.log(location);
+            CheckLocationSelected = true;
+            informations.location = locationChoice[i].value;
             break;
         }
     }
-    if (!locationSelected) {
+    if (!CheckLocationSelected) {
         errorLocation.innerHTML = messages.location;
     } else {
         errorLocation.innerHTML = "";
-        informations.location = location;
     }
 
     //vérification que les conditions d'utilisation sont validées
+    let cguChecked = false;
     if (!cguCheck.checked) {
         errorCGU.innerHTML = messages.cgu;
     } else {
         errorCGU.innerHTML = "";
+        informations.cgu = true;
+        cguChecked = true;
     }
 
-    console.log(informations)
+    console.log(checkDate, checkQuantity, checkEmail, checkFirstName)
+    if (checkFirstName
+        && checkLastName
+        && checkEmail
+        && checkQuantity
+        && checkDate
+        && CheckLocationSelected
+        && cguChecked
+    ) {
+        informations.firstName = firstName.value.trim();
+        informations.lastName = lastName.value.trim();
+        informations.email = email.value.trim();
+        informations.quantity = quantity.value.trim();
+        informations.date = dateBirthday.value.trim();
 
+        modalContent.innerHTML = " Merci <span>" + informations.firstName + "</span> !<br> Votre réservation a bien été reçue."
+        modalContent.classList.add("succes-msg")
+        console.log(informations)
+    }
 })
 
-function verifierChamp(champ, regEx, message, champErreur) {
-    if (champ.value.trim() === "") {
-        champErreur.innerHTML = messages.empty
-    } else if (!regEx.test(champ.value.trim())) {
-        champErreur.innerHTML = message;
-    } else {
-        champErreur.innerHTML = "";
-    }
-}
+
 
 
 
