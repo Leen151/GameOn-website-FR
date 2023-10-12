@@ -6,9 +6,9 @@ const iconeMenu = document.querySelector(".icon");
 const reductedMenu = document.getElementById("myTopnav");
 const closeBtn = document.querySelector(".close");
 
-//éléments DOM du formulaire
-//const formData = document.querySelectorAll(".formData");
-//const submitBtn = document.querySelector(".btn-submit");
+// éléments DOM du formulaire
+// const formData = document.querySelectorAll(".formData");
+// const submitBtn = document.querySelector(".btn-submit");
 const form = document.querySelector("form");
 const firstName = document.getElementById("first");
 const lastName = document.getElementById("last");
@@ -17,7 +17,7 @@ const dateBirthday = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 let locationChoice = document.querySelectorAll('input[name="location"]');
 const cguCheck = document.getElementById("checkbox1");
-//éléments DOM pour l'affichage des erreurs
+// éléments DOM pour l'affichage des erreurs
 const errorFirst = document.getElementById("erreurFirst");
 const errorLast = document.getElementById("erreurLast");
 const errorEmail = document.getElementById("erreurEmail");
@@ -36,22 +36,22 @@ function toggleResponsiveClass() {
     reductedMenu.classList.toggle("responsive");
 }
 
-//au clic sur l'icône du menu, la fonction est appelée et permet d'afficher ou de cacher le menu
+// au clic sur l'icône du menu, la fonction est appelée et permet d'afficher ou de cacher le menu
 iconeMenu.addEventListener("click", toggleResponsiveClass);
 
 
 /////////// Apparition de la modale /////////////
-//launch modal event
+//l aunch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
-//launch modal form
+// launch modal form
 function launchModal() {
     modalbg.style.display = "block";
 }
 
 
 //////// Fermeture de la modale ////////////////
-//création de l'événement : au clic, appel de la fonction "closeModal"
+// création de l'événement : au clic, appel de la fonction "closeModal"
 closeBtn.addEventListener("click", closeModal);
 
 //fonction qui repasse la modale en display none : la modale disparait
@@ -77,6 +77,7 @@ const messages = {
     cgu: "Vous devez accepter les conditions d'utilisation"
 };
 
+// création d'un objet servant à stocker les informations du formulaire
 const informations = {
     firstName: "",
     lastName: "",
@@ -145,23 +146,25 @@ quantity.addEventListener("blur", function () {
 });
 
 // vérification de la date
+const oneYearTime = 365 * 24 * 60 * 60 * 1000;  // durée d'une année en milliseconde
+const todayTime = new Date().getTime();  // nombre de millisecondes écoulées depuis le premier janvier 1970 à minuit UTC jusqu'au jour actuel
+
 let checkDate = false;
 dateBirthday.addEventListener("blur", function () {
-    const oneYearTime = 365 * 24 * 60 * 60 * 1000;  // durée d'une année en milliseconde
-    const todayTime = new Date().getTime();  // nombre de millisecondes écoulées depuis le premier janvier 1970 à minuit UTC jusqu'au jour actuel
     const birthdayNumber = new Date(dateBirthday.value).getTime();  // nombre de millisecondes écoulées jusqu'à la date renseignée
-    const age = (todayTime - birthdayNumber) / oneYearTime
+    const age = (todayTime - birthdayNumber) / oneYearTime // "age" de l'inscrit(e)
     const conditionAge = age<15
 
     checkDate = verifierDate(dateBirthday, regExDate, messages.date, conditionAge, messages.age, errorDate)
 });
 
-// au submit
+////////// Soumission du formulaire /////////////
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     console.log("submit");
 
-    //vérification qu'une ville est sélectionnée
+    // on vérifie les cases à cocher ici
+    // vérification qu'une ville est sélectionnée
     let CheckLocationSelected = false;
     for (let i = 0; i < locationChoice.length; i++) {
         if (locationChoice[i].checked) {
@@ -176,7 +179,7 @@ form.addEventListener("submit", (event) => {
         errorLocation.innerHTML = "";
     }
 
-    //vérification que les conditions d'utilisation sont validées
+    // vérification que les conditions d'utilisation sont validées
     let cguChecked = false;
     if (!cguCheck.checked) {
         errorCGU.innerHTML = messages.cgu;
@@ -184,6 +187,28 @@ form.addEventListener("submit", (event) => {
         errorCGU.innerHTML = "";
         informations.cgu = true;
         cguChecked = true;
+    }
+
+    // on vérifie que les autres champs ont été correctement remplis
+    // si c'est pas le cas, on relance les fonctions de vérification pour afficher les méthodes
+    if(!checkFirstName){
+        checkFirstName = verifierChamp(firstName, regExName, messages.first, errorFirst);
+    }
+    if(!checkLastName){
+        checkLastName = verifierChamp(lastName, regExName, messages.last, errorLast);
+    }
+    if(!checkEmail){
+        checkEmail = checkEmail = verifierChamp(email, regExEmail, messages.email, errorEmail);
+    }
+    if(!checkQuantity){
+        checkQuantity = verifierChamp(quantity, regExQuantity, messages.quantity, errorQuantity);
+    }
+    if(!checkDate){
+        const birthdayNumber = new Date(dateBirthday.value).getTime();  // nombre de millisecondes écoulées jusqu'à la date renseignée
+        const age = (todayTime - birthdayNumber) / oneYearTime // "age" de l'inscrit(e)
+        const conditionAge = age<15
+
+        checkDate = verifierDate(dateBirthday, regExDate, messages.date, conditionAge, messages.age, errorDate)
     }
 
     console.log(checkDate, checkQuantity, checkEmail, checkFirstName)
