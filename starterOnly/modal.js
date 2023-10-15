@@ -1,4 +1,5 @@
-//////// DOM Elements //////////////
+////////// DOM Elements //////////////
+//////////////////////////////////////
 const modalbg = document.querySelector(".bground");
 const modalContent = document.querySelector(".modal-body")
 const modalBtn = document.querySelectorAll(".btn-signup");
@@ -27,6 +28,7 @@ const errorLocation = document.getElementById("erreurLocation");
 const errorCGU = document.getElementById("erreurCheckbox1");
 
 //////// Gestion du menu responsive /////////////
+/////////////////////////////////////////////////
 /*
 fonction qui permet de gérer l'ajout ou le retrait de la classe "responsive" :
 quand la classe CSS "responsive" est présente, le menu est affiché
@@ -41,7 +43,8 @@ iconeMenu.addEventListener("click", toggleResponsiveClass);
 
 
 /////////// Apparition de la modale /////////////
-//l aunch modal event
+/////////////////////////////////////////////////
+//launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 // launch modal form
@@ -49,8 +52,8 @@ function launchModal() {
     modalbg.style.display = "block";
 }
 
-
 //////// Fermeture de la modale ////////////////
+////////////////////////////////////////////////
 // création de l'événement : au clic, appel de la fonction "closeModal"
 closeBtn.addEventListener("click", closeModal);
 
@@ -59,7 +62,9 @@ function closeModal() {
     modalbg.style.display = "none";
 }
 
-// Déclaration des constantes pour le traitement du formulaire
+
+///// Déclaration des constantes et des fonctions pour le traitement du formulaire /////
+////////////////////////////////////////////////////////////////////////////////////////
 const regExEmail = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$"); // regEx pour une adresse mail
 const regExName = new RegExp("^[A-Za-z-]{2,64}$"); //regEx pour avoir au moins 2 lettres et 64 max (accepte le -)
 const regExQuantity = new RegExp("^[0-9]{1,3}$"); //regEx pour avoir un nombre entre 1 et 3 chiffres)
@@ -85,7 +90,7 @@ const informations = {
     date: "",
     quantity: "",
     location: "",
-    cgu: ""
+    cguChecked: ""
 }
 
 // fonction générique pour vérifier un champ à l'aide d'une regEx et gérer l'affichage des messages d'erreur
@@ -102,15 +107,16 @@ function verifierChamp(champ, regEx, message, champErreur) {
     }
 }
 
-// fonction générique de vérification de date
-function verifierDate(champ, regEx, messageRegEx, condition, messageAge, champErreur){
+// fonction générique de vérification quand on a 1 condition de plus que précédemment
+// utiliser pour de date
+function verifierDate(champ, regEx, messageRegEx, conditionSecondaire, messageAge, champErreur){
     if (champ.value.trim() === "") {
         champErreur.innerHTML = messages.empty
         return false
     } else if (!regEx.test(champ.value)) {
         champErreur.innerHTML = messageRegEx;
         return false
-    } else if (condition) {
+    } else if (conditionSecondaire) {
         champErreur.innerHTML = messageAge
         return false
     } else {
@@ -119,10 +125,10 @@ function verifierDate(champ, regEx, messageRegEx, condition, messageAge, champEr
     }
 }
 
-
-
+/////// Vérification des champs AVANT la soumission ////////
+////////////////////////////////////////////////////////////
 // vérification du Prénom
-let checkFirstName = false;
+let checkFirstName = false; // variable servant à enregistrer la validation du champs
 firstName.addEventListener("blur", function () {
     checkFirstName = verifierChamp(firstName, regExName, messages.first, errorFirst);
 });
@@ -158,10 +164,10 @@ dateBirthday.addEventListener("blur", function () {
     checkDate = verifierDate(dateBirthday, regExDate, messages.date, conditionAge, messages.age, errorDate)
 });
 
-////////// Soumission du formulaire /////////////
+//////////// Soumission du formulaire /////////////
+///////////////////////////////////////////////////
 form.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log("submit");
 
     // on vérifie les cases à cocher ici
     // vérification qu'une ville est sélectionnée
@@ -169,7 +175,7 @@ form.addEventListener("submit", (event) => {
     for (let i = 0; i < locationChoice.length; i++) {
         if (locationChoice[i].checked) {
             CheckLocationSelected = true;
-            informations.location = locationChoice[i].value;
+            informations.location = locationChoice[i].value; //on stock la ville choisit dans l'objet
             break;
         }
     }
@@ -190,7 +196,8 @@ form.addEventListener("submit", (event) => {
     }
 
     // on vérifie que les autres champs ont été correctement remplis
-    // si c'est pas le cas, on relance les fonctions de vérification pour afficher les méthodes
+    // si ce n'est pas le cas, on relance les fonctions de vérification
+    // pour voir quel est le problème et pour afficher les messages d'erreur en conséquence
     if(!checkFirstName){
         checkFirstName = verifierChamp(firstName, regExName, messages.first, errorFirst);
     }
@@ -198,7 +205,7 @@ form.addEventListener("submit", (event) => {
         checkLastName = verifierChamp(lastName, regExName, messages.last, errorLast);
     }
     if(!checkEmail){
-        checkEmail = checkEmail = verifierChamp(email, regExEmail, messages.email, errorEmail);
+        checkEmail = verifierChamp(email, regExEmail, messages.email, errorEmail);
     }
     if(!checkQuantity){
         checkQuantity = verifierChamp(quantity, regExQuantity, messages.quantity, errorQuantity);
@@ -211,7 +218,8 @@ form.addEventListener("submit", (event) => {
         checkDate = verifierDate(dateBirthday, regExDate, messages.date, conditionAge, messages.age, errorDate)
     }
 
-    console.log(checkDate, checkQuantity, checkEmail, checkFirstName)
+    // Si tous les champs sont remplis correctement, l'objet informations est rempli avec les valeurs du formulaire
+    // Un message de succès s'affiche à l'écran et l'objet est affiché dans la console.
     if (checkFirstName
         && checkLastName
         && checkEmail
