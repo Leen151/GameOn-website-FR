@@ -2,6 +2,7 @@
   --font-default: "DM Sans", Arial, Helvetica, sans-serif;
   --modal-duration: 0.8s;
 }
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -94,7 +95,7 @@ main {
 }
 
 .btn-submit {
-  margin-top: 0.5em;
+  margin-top: 0.7rem;
   padding: 12px 82px;
   font-size: 14px;
 }
@@ -192,7 +193,7 @@ main {
 
 .modal-body {
   padding: 15px 8%;
-  margin: 15px auto;
+  margin: 15px auto 0 auto;
 }
 
 label {
@@ -225,9 +226,14 @@ input {
 .checkbox2-label {
   position: relative;
   margin-left: 36px;
-  font-size: 12px;
   font-weight: normal;
 }
+
+.checkbox-label{
+  font-size: 13px;
+}
+
+
 .checkbox-label .checkbox-icon,
 .checkbox2-label .checkbox-icon {
   display: block;
@@ -292,6 +298,7 @@ input {
 
 .erreur{
   color: #fe142f;
+  font-size: 0.8rem;
 }
 
 .succes-msg{
@@ -329,6 +336,13 @@ input {
 }
 .close:after {
   transform: rotate(-45deg);
+}
+
+.legende{
+  display: inline-block;
+  padding-top: 10px;
+  font-weight: normal;
+  font-size: 12px;
 }
 
 
