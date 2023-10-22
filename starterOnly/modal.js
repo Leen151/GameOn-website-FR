@@ -8,8 +8,6 @@ const reductedMenu = document.getElementById("myTopnav");
 const closeBtn = document.querySelector(".close");
 
 // éléments DOM du formulaire
-// const formData = document.querySelectorAll(".formData");
-// const submitBtn = document.querySelector(".btn-submit");
 const form = document.querySelector("form");
 const firstName = document.getElementById("first");
 const lastName = document.getElementById("last");
@@ -44,7 +42,7 @@ iconeMenu.addEventListener("click", toggleResponsiveClass);
 
 /////////// Apparition de la modale /////////////
 /////////////////////////////////////////////////
-//launch modal event
+// launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 // launch modal form
@@ -68,7 +66,7 @@ function closeModal() {
 const regExEmail = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$"); // regEx pour une adresse mail
 const regExName = new RegExp("^[A-Za-z-]{2,64}$"); //regEx pour avoir au moins 2 lettres et 64 max (accepte le -)
 const regExQuantity = new RegExp("^[0-9]{1,3}$"); //regEx pour avoir un nombre entre 1 et 3 chiffres)
-const regExDate = new RegExp("^\\d{4}-\\d{2}-\\d{2}$");
+const regExDate = new RegExp("^\\d{4}-\\d{2}-\\d{2}$"); //regEx pour les dates au format aaaa/mm/dd
 
 const messages = {
     empty: "Ce champ est obligatoire",
@@ -128,9 +126,10 @@ function verifierDate(champ, regEx, messageRegEx, conditionSecondaire, messageAg
 /////// Vérification des champs AVANT la soumission ////////
 ////////////////////////////////////////////////////////////
 // vérification du Prénom
-let checkFirstName = false; // variable servant à enregistrer la validation du champs
+let checkFirstName = false; // variable servant à enregistrer si le champ est valide ou non
 firstName.addEventListener("blur", function () {
     checkFirstName = verifierChamp(firstName, regExName, messages.first, errorFirst);
+    // la variable prendra la valeur retournée par la fonction verifierChamp()
 });
 
 // vérification du Nom
