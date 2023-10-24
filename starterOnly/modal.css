@@ -73,7 +73,8 @@ main {
 
 /****** css boutons ******/
 .btn-submit,
-.btn-signup {
+.btn-signup,
+.btn-close{
   background: #fe142f;
   display: block;
   margin: 0 auto;
@@ -94,10 +95,15 @@ main {
   font-size: 25px;
 }
 
-.btn-submit {
+.btn-submit,
+.btn-close{
   margin-top: 0.7rem;
   padding: 12px 82px;
   font-size: 14px;
+}
+
+.btn-close {
+
 }
 
 /* cible .btn-signup qui est 1er enfant de hero section */
@@ -302,9 +308,18 @@ input {
 }
 
 .succes-msg{
+  display: flex;
+  flex-direction: column;
   text-align: center;
   font-size: 2.1rem;
-  margin: 60px auto;
+  margin: 20px auto;
+  height: 80vh;
+}
+.div-success{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .succes-msg span{
@@ -399,6 +414,13 @@ footer {
 @media screen and (max-width: 540px) {
   .topnav.responsive .main-navbar{
     margin-right: 0;
+  }
+
+  .content {
+    margin: 0 auto;
+  }
+  .succes-msg{
+    height: 100vh;
   }
 }
 

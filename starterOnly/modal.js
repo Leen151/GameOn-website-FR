@@ -14,7 +14,7 @@ const lastName = document.getElementById("last");
 const email = document.getElementById("email");
 const dateBirthday = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
-let locationChoice = document.querySelectorAll('input[name="location"]');
+const locationChoice = document.querySelectorAll('input[name="location"]');
 const cguCheck = document.getElementById("checkbox1");
 // éléments DOM pour l'affichage des erreurs
 const errorFirst = document.getElementById("erreurFirst");
@@ -233,8 +233,15 @@ form.addEventListener("submit", (event) => {
         informations.quantity = quantity.value.trim();
         informations.date = dateBirthday.value.trim();
 
-        modalContent.innerHTML = " Merci <span>" + informations.firstName + "</span> !<br> Votre réservation a bien été reçue."
+        let modalSuccess = `
+            <div class="div-success"><p> Merci <span>${informations.firstName}</span> !<br> Votre réservation a bien été reçue. </p></div>
+            <button class="btn-close">Fermer</button> `
+
+        modalContent.innerHTML = modalSuccess;
         modalContent.classList.add("succes-msg")
+        const closeBtn2 = document.querySelector(".btn-close");
+        closeBtn2.addEventListener("click", closeModal);
+
         console.log(informations)
     }
 })
